@@ -1,6 +1,8 @@
 package config
 
 import (
+	"os"
+
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 )
@@ -10,7 +12,10 @@ var (
 )
 
 func Connect() {
-	dsn := "root:root@tcp(127.0.0.1:3306)/bookstore?charset=utf8mb4&parseTime=True&loc=Local"
+	dsn := os.Getenv("MYSQL_DSN")
+	if dsn == "" {
+		dsn = "root:root@tcp(127.0.0.1:3306)/bookstore?charset=utf8mb4&parseTime=True&loc=Local"
+	}
 	d, err := gorm.Open("mysql", dsn)
 	if err != nil {
 		panic(err)
